@@ -26,15 +26,17 @@ const addPreviewColumn = ( { displayedHeaders, layout }, pluginConfig ) => {
           type: 'string',
         },
         metadatas: {
-          label: 'Preview',
+          label: 'URL',
           searchable: false,
           sortable: false,
         },
         name: 'preview',
         cellFormatter: data => {
           const hasDraftAndPublish = layout.contentType.options.draftAndPublish === true;
-          const isDraft = hasDraftAndPublish && ! data.publishedAt;
-          const stateConfig = isSupportedType && match[ isDraft ? 'draft' : 'published' ];
+          //const isDraft = hasDraftAndPublish && ! data.publishedAt;
+          const isDraft = false; // For the table, we treat it as production always! So there is no mistake.
+          //const stateConfig = isSupportedType && match[ isDraft ? 'draft' : 'published' ];
+          const stateConfig = isSupportedType && match[ 'published' ]; // For to show copy and open production page
           const url = parseUrl( stateConfig, data );
 
           if ( ! url ) {

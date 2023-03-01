@@ -9,6 +9,7 @@ const usePreviewUrl = ( uid, data, isDraft, isCreating ) => {
   const { runHookWaterfall } = useStrapiApp();
   const { config, isLoading } = usePluginConfig();
   const [ url, setUrl ] = useState( null );
+  const [ publishedUrl, setPublishedUrl ] = useState( null );
   const [ canCopy, setCopy ] = useState( true );
 
   const { contentTypes } = config;
@@ -21,15 +22,18 @@ const usePreviewUrl = ( uid, data, isDraft, isCreating ) => {
       return;
     }
 
-    const stateFromConfig = match[ isDraft ? 'draft' : 'published' ];
+    //const stateFromConfig = match[ isDraft ? 'draft' : 'published' ];
+    const stateFromConfig = match[ 'draft' ]; // Treat everything as draft except when using publishedUrl
     const { state } = runHookWaterfall( HOOK_BEFORE_BUILD_URL, { state: stateFromConfig, data } );
     const url = parseUrl( state, data );
+    const publishedUrl = parseUrl(match[ 'published' ], data)
 
     if ( ! url ) {
       return;
     }
 
     setUrl( url );
+    setPublishedUrl( publishedUrl );
     setCopy( state?.copy === false ? false : true );
   }, [ isDraft, isCreating, isLoading, data ] );
 
@@ -38,6 +42,7 @@ const usePreviewUrl = ( uid, data, isDraft, isCreating ) => {
     isLoading,
     isSupportedType,
     url,
+    publishedUrl
   };
 };
 

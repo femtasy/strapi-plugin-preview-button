@@ -14,13 +14,15 @@ const EditViewRightLinks = () => {
     modifiedData,
   } = useCMEditViewDataManager();
   const { openTarget } = useSelector( state => state[ `${pluginId}_config` ].config );
-  const isDraft = hasDraftAndPublish && ! modifiedData?.publishedAt;
+  //const isDraft = hasDraftAndPublish && ! modifiedData?.publishedAt;
+  const isDraft = true; // Everything behaves as draft except when using publishedUrl
   const { uid } = allLayoutData.contentType;
   const {
     canCopy,
     isLoading,
     isSupportedType,
     url,
+    publishedUrl,
   } = usePreviewUrl( uid, modifiedData, isDraft, isCreatingEntry );
 
   if ( ! url || ! isSupportedType || isCreatingEntry || isLoading ) {
@@ -30,7 +32,7 @@ const EditViewRightLinks = () => {
   return (
     <>
       <PreviewButton isDraft={ isDraft } url={ url } target={ openTarget } />
-      { canCopy && <CopyLinkButton isDraft={ isDraft } url={ url } /> }
+      { canCopy && <CopyLinkButton isDraft={ false } url={ publishedUrl } /> }
     </>
   );
 };
